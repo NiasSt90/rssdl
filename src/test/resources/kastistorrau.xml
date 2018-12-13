@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:atom="http://www.w3.org/2005/Atom">
+      <channel>
+        <atom:link href="http://feeds.soundcloud.com/users/soundcloud:users:215315/sounds.rss" rel="self" type="application/rss+xml"/>
+        <atom:link href="http://feeds.soundcloud.com/users/soundcloud:users:215315/sounds.rss?before=208320204" rel="next" type="application/rss+xml"/>
+        <title>Kastis Torrau</title>
+        <link>http://www.kastistorrau.com</link>
+        <pubDate>Tue, 06 Nov 2018 09:18:23 +0000</pubDate>
+        <lastBuildDate>Tue, 06 Nov 2018 09:18:23 +0000</lastBuildDate>
+        <ttl>60</ttl>
+        <language>en</language>
+        <copyright>All rights reserved</copyright>
+        <webMaster>feeds@soundcloud.com (SoundCloud Feeds)</webMaster>
+        <description>Bookings - https://www.bpamusic.net/kastis-torrau
+
+Lights Out Records / Last Night On Earth / Heinz Records / Hope Recordings / Plattenbank Records / Click Records / King Street Sound / Perspectives Records / Armada / Black Hole Records
+
+Top notch. Kastis Torrau’s talent has rocketed him from small local venue to the biggest clubbing scenes in the country, his name becoming a trademark for an impressive, memorable and every time different event. A real treat for clubbing gourmand with a guarantee for sexually charged tuneful house, tech house rhythms spiced up with progressive sound. Though different, but each and every time making the audience tremble by sharing the passion for music and beat, that is being created by the talented hands of this DJ. Not without a reason Kastis is well renowned for dedication to his work and feel for the audience – only he can make most genuine emotions flow on the dance floor. “The success of the evening is always determined by the crowd – hence my aim is to create a very special mood, distil a perfect sound and impressive overall effect. Always” – claims Kastis Torrau. In time of his five years residense in the Lithuanian best club Exit, he was sharing the booth with such world’s elite as Steve Lawler, Danny Howells, Lee Burridge, Sander Kleinenberg, Moshic, Omid16B, Lexicon Avenue, Peace Division or Deep Dish, Behrouz, Hernan Cattaneo, Tall Paul, Dj Remy, Armin Van Buuren, Gabriel &amp; Dresden, Andry Nalin, Timo Maas, Tomcraft, Paolo Mojo, Satoshi Tomiie, 16 Bit Lolitas, Echomen, Smokin Jo, Paul Woolford, James Zabiela, Gregor Tresher, King Unique speak soundly of Kastis Torrau’s experience and serve as best compliments to his professional regard. Besides persistent and outstanding work Kastis prides “The DJ of the Public” and “Best Newcomer DJ” awards, as well as being a usual prize winner in various Lithuanian DJ championships. He is a welcome guest to high profile venues and events in the Kaliningrad region and has played in a massive Estonian dance music event “Sun Dance Music Festival” and Stockholm’s club “Weekender”,on 2004-2005 new years night had very impressive gig in Porto (Portugal). Year 2006 become the gratest achievement for Dj‘s these days,He was chosen the resident in Lithuania of well known worlds clubbing trademark- GlobalUnderground. His music is depicted by distinctive and powerful base lines, versatility of original samples and unforgettable vocals – all mixed by the creative hands of a DJ make the audience loose their time in rage of satisfaction.</description>
+        <itunes:subtitle>Bookings - https://www.bpamusic.net/kastis-torrau…</itunes:subtitle>
+        <itunes:owner>
+          <itunes:name>Kastis Torrau</itunes:name>
+          <itunes:email>feeds@soundcloud.com</itunes:email>
+        </itunes:owner>
+        <itunes:author>Kastis Torrau</itunes:author>
+        <itunes:explicit>no</itunes:explicit>
+        <itunes:image href="http://i1.sndcdn.com/avatars-000346143023-x6z3s2-original.jpg"/>
+        <image>
+          <url>http://i1.sndcdn.com/avatars-000346143023-x6z3s2-original.jpg</url>
+          <title>Kastis Torrau</title>
+          <link>http://www.kastistorrau.com</link>
+        </image>
+        
+        <item>
+      <guid isPermaLink="false">tag:soundcloud,2010:tracks/208320204</guid>
+      <title>Kastis Torrau - Senses #60 - 2015.06.01</title>
+      <pubDate>Mon, 01 Jun 2015 20:02:00 +0000</pubDate>
+      <link>https://soundcloud.com/kastis-torrau/kastis-torrau-senses-60-20150601</link>
+      <itunes:duration>01:04:17</itunes:duration>
+      <itunes:author>Kastis Torrau</itunes:author>
+      <itunes:explicit>no</itunes:explicit>
+      <itunes:summary>https://www.facebook.com/KastisTorrauOfficialFanpage</itunes:summary>
+      <itunes:subtitle>https://www.facebook.com/KastisTorrauOfficialFanp…</itunes:subtitle>
+      <description>https://www.facebook.com/KastisTorrauOfficialFanpage</description>
+      <enclosure type="audio/mpeg" url="http://feeds.soundcloud.com/stream/208320204-kastis-torrau-kastis-torrau-senses-60-20150601.mp3" length="123424237"/>
+      <itunes:image href="http://i1.sndcdn.com/artworks-000118835144-us0nat-original.jpg"/>
+    </item>
+      </channel>
+    </rss>

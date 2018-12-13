@@ -1,0 +1,81 @@
+{
+  "nid": "171221",
+  "uid": "44",
+  "name": "Thomas Williams",
+  "title": "thomas williams - Ersatzverkehr",
+  "replacetitle": "${143290} - Ersatzverkehr",
+  "status": "1",
+  "created": "1512323506",
+  "changed": "1514666335",
+  "setcreated": "1512255600",
+  "lastheard": null,
+  "duration": 8052,
+  "taxonomy": {
+    "167": {
+      "tid": "167",
+      "vid": "11",
+      "name": "set",
+      "description": "",
+      "weight": "0",
+      "v_weight_unused": "0"
+    },
+    "118": {
+      "tid": "118",
+      "vid": "2",
+      "name": "techno",
+      "description": "",
+      "weight": "22",
+      "v_weight_unused": "0"
+    }
+  },
+  "votes": {
+    "my": null,
+    "avg": 4,
+    "count": "1",
+    "firstgoodvote": {
+      "uid": "43",
+      "name": "Nias",
+      "vote": "4",
+      "timestamp": "1514666335"
+    },
+    "all": [
+      {
+        "uid": "43",
+        "name": "Nias",
+        "vote": "4",
+        "timestamp": "1514666335"
+      }
+    ],
+    "sum": 1
+  },
+  "bookmarked": false,
+  "trackinfo": [
+    {
+      "filename": "Thomas Williams - Ersatzverkehr.mp3",
+      "downloadfilename": "thomas williams - ersatzverkehr 2017-12-03.mp3",
+      "fsize": "322107730",
+      "duration": "8052",
+      "frequency": "44100",
+      "bitrate": "320",
+      "mode": "stereo",
+      "artist": "thomas williams",
+      "title": "Ersatzverkehr"
+    }
+  ],
+  "comments": [],
+  "artists": [
+    {
+      "djid": "54996",
+      "artistnid": "143290"
+    }
+  ],
+  "myplaycount": 0,
+  "allplaycount": 10,
+  "djset": null,
+  "dj": {
+    "id": "54996",
+    "name": "thomas williams",
+    "country": "",
+    "lastfm_artistinfo_timestamp": "1540490284"
+  }
+}

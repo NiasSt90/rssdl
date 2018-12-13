@@ -1,0 +1,190 @@
+{
+  "nid": "171221",
+  "type": "mischungxl",
+  "language": "de",
+  "uid": "44",
+  "status": "1",
+  "created": "1512323506",
+  "changed": "1514666335",
+  "comment": "2",
+  "promote": "0",
+  "moderate": "0",
+  "sticky": "0",
+  "tnid": "0",
+  "translate": "0",
+  "vid": "172350",
+  "revision_uid": "43",
+  "title": "Thomas Williams - Ersatzverkehr",
+  "body": "",
+  "teaser": "",
+  "log": "",
+  "revision_timestamp": "1514666335",
+  "format": "0",
+  "name": "Thomas Williams",
+  "picture": "sites/default/files/pictures/picture-44.png",
+  "data": "a:10:{s:6:\"submit\";s:12:\"Registrieren\";s:7:\"form_id\";s:13:\"user_register\";s:16:\"guestbook_status\";s:1:\"0\";s:15:\"guestbook_intro\";s:0:\"\";s:14:\"picture_delete\";i:0;s:10:\"form_token\";s:32:\"113451bb48921757f4ca6e7545d5981e\";s:17:\"guestbook_visited\";i:1197555681;s:14:\"tinymce_status\";s:4:\"true\";s:14:\"picture_upload\";s:0:\"\";s:13:\"form_build_id\";s:37:\"form-3a7a526c4df23c061281a33e3a129a63\";}",
+  "bookmarked": false,
+  "setcreated": "1512255600",
+  "fulltitle": "Thomas Williams - Ersatzverkehr",
+  "artistdetection_disabled": "1",
+  "replacetitle": "${143290} - Ersatzverkehr",
+  "taxonomy_by_dj": 0,
+  "tagged": "0",
+  "lastheard": null,
+  "mxltype": "",
+  "source": "",
+  "votes": {
+    "my": null,
+    "avg": 4,
+    "count": "1",
+    "firstgoodvote": {
+      "uid": "43",
+      "name": "Nias",
+      "vote": "4",
+      "timestamp": "1514666335"
+    },
+    "all": [
+      {
+        "uid": "43",
+        "name": "Nias",
+        "vote": "4",
+        "timestamp": "1514666335"
+      }
+    ],
+    "sum": 1
+  },
+  "artistnids": "{143290}",
+  "artistNodes": {
+    "143290": {
+      "nid": "143290",
+      "type": "mischungxlartist",
+      "language": "de",
+      "uid": "0",
+      "status": "1",
+      "created": "1450041265",
+      "changed": "1540490284",
+      "comment": "0",
+      "promote": "0",
+      "moderate": "0",
+      "sticky": "0",
+      "tnid": "0",
+      "translate": "0",
+      "vid": "144419",
+      "revision_uid": "0",
+      "title": "thomas williams",
+      "body": "",
+      "teaser": "",
+      "log": "",
+      "revision_timestamp": "1540490284",
+      "format": "0",
+      "name": "",
+      "picture": "",
+      "data": null,
+      "aliases_pg": "{}",
+      "aliases": [],
+      "country": "",
+      "lastfm_artistinfo": "{\"name\":\"Thomas Williams\",\"url\":\"https:\\/\\/www.last.fm\\/music\\/Thomas+Williams\",\"image\":[{\"#text\":\"\",\"size\":\"small\"},{\"#text\":\"\",\"size\":\"medium\"},{\"#text\":\"\",\"size\":\"large\"},{\"#text\":\"\",\"size\":\"extralarge\"},{\"#text\":\"\",\"size\":\"mega\"},{\"#text\":\"\",\"size\":\"\"}],\"streamable\":\"0\",\"ontour\":\"0\",\"stats\":{\"listeners\":\"102\",\"playcount\":\"631\"},\"similar\":{\"artist\":[{\"name\":\"Benedict Giles\",\"url\":\"https:\\/\\/www.last.fm\\/music\\/Benedict+Giles\",\"image\":[{\"#text\":\"\",\"size\":\"small\"},{\"#text\":\"\",\"size\":\"medium\"},{\"#text\":\"\",\"size\":\"large\"},{\"#text\":\"\",\"size\":\"extralarge\"},{\"#text\":\"\",\"size\":\"mega\"},{\"#text\":\"\",\"size\":\"\"}]},{\"name\":\"Gesangbuch der H.W.K. Hofkapelle\",\"url\":\"https:\\/\\/www.last.fm\\/music\\/Gesangbuch+der+H.W.K.+Hofkapelle\",\"image\":[{\"#text\":\"\",\"size\":\"small\"},{\"#text\":\"\",\"size\":\"medium\"},{\"#text\":\"\",\"size\":\"large\"},{\"#text\":\"\",\"size\":\"extralarge\"},{\"#text\":\"\",\"size\":\"mega\"},{\"#text\":\"\",\"size\":\"\"}]},{\"name\":\"Lyra Davidica\",\"url\":\"https:\\/\\/www.last.fm\\/music\\/Lyra+Davidica\",\"image\":[{\"#text\":\"\",\"size\":\"small\"},{\"#text\":\"\",\"size\":\"medium\"},{\"#text\":\"\",\"size\":\"large\"},{\"#text\":\"\",\"size\":\"extralarge\"},{\"#text\":\"\",\"size\":\"mega\"},{\"#text\":\"\",\"size\":\"\"}]},{\"name\":\"Frederick Charles Maker\",\"url\":\"https:\\/\\/www.last.fm\\/music\\/Frederick+Charles+Maker\",\"image\":[{\"#text\":\"\",\"size\":\"small\"},{\"#text\":\"\",\"size\":\"medium\"},{\"#text\":\"\",\"size\":\"large\"},{\"#text\":\"\",\"size\":\"extralarge\"},{\"#text\":\"\",\"size\":\"mega\"},{\"#text\":\"\",\"size\":\"\"}]},{\"name\":\"Geistliches Gesangb\\u00fcchlein\",\"url\":\"https:\\/\\/www.last.fm\\/music\\/Geistliches+Gesangb%C3%BCchlein\",\"image\":[{\"#text\":\"\",\"size\":\"small\"},{\"#text\":\"\",\"size\":\"medium\"},{\"#text\":\"\",\"size\":\"large\"},{\"#text\":\"\",\"size\":\"extralarge\"},{\"#text\":\"\",\"size\":\"mega\"},{\"#text\":\"\",\"size\":\"\"}]}]},\"tags\":{\"tag\":[]},\"bio\":{\"links\":{\"link\":{\"#text\":\"\",\"rel\":\"original\",\"href\":\"https:\\/\\/last.fm\\/music\\/Thomas+Williams\\/+wiki\"}},\"published\":\"01 Jan 1970, 00:00\",\"summary\":\" <a href=\\\"https:\\/\\/www.last.fm\\/music\\/Thomas+Williams\\\">Read more on Last.fm<\\/a>\",\"content\":\"\"}}",
+      "lastfm_artistname": "Thomas Williams",
+      "lastfm_errorcount": "0",
+      "lastfm_nexttry": "1550858284",
+      "lastfm_artistinfo_timestamp": "1540490284",
+      "djid": "54996",
+      "artisttype": "normal",
+      "lastfm_img_local": 0,
+      "similar_artists": [
+        {
+          "match": "1",
+          "nid": "100321"
+        },
+        {
+          "match": "0.863909",
+          "nid": "147822"
+        },
+        {
+          "match": "0.831511",
+          "nid": "103487"
+        },
+        {
+          "match": "0.653323",
+          "nid": "156094"
+        },
+        {
+          "match": "0.506879",
+          "nid": "156095"
+        }
+      ],
+      "path": "inhalt/thomas-williams",
+      "0": false,
+      "taxonomy": {
+        "118": {
+          "tid": "118",
+          "vid": "2",
+          "name": "techno",
+          "description": "",
+          "weight": "22",
+          "v_weight_unused": "0"
+        }
+      },
+      "nodevote": {}
+    }
+  },
+  "anzeigename": "thomas williams - Ersatzverkehr",
+  "setcreatedfield": {
+    "year": "2017",
+    "month": "12",
+    "day": "3"
+  },
+  "duration": 8052,
+  "trackinfo": [
+    {
+      "pos": "1",
+      "filestorage": "1",
+      "filepathrelative": "/171221/Thomas Williams - Ersatzverkehr.mp3",
+      "filesize": "322107730",
+      "filemd5": "75337d8cc97127df41d53862a40ad5b0",
+      "downloadfilename": "thomas williams - ersatzverkehr 2017-12-03.mp3",
+      "mp3duration": "8052",
+      "mp3frequency": "44100",
+      "mp3bitrate": "320",
+      "mp3mode": "stereo",
+      "artists": [
+        "thomas williams"
+      ],
+      "title": "Ersatzverkehr",
+      "nid": "171221"
+    }
+  ],
+  "comments": [],
+  "myplaycount": 0,
+  "allplaycount": 10,
+  "scores": null,
+  "userscores": null,
+  "score": null,
+  "path": "mischungxl/thomas-williams-ersatzverkehr-03-12-2017",
+  "last_comment_timestamp": "1512323506",
+  "last_comment_name": null,
+  "comment_count": "0",
+  "taxonomy": {
+    "167": {
+      "tid": "167",
+      "vid": "11",
+      "name": "set",
+      "description": "",
+      "weight": "0",
+      "v_weight_unused": "0"
+    },
+    "118": {
+      "tid": "118",
+      "vid": "2",
+      "name": "techno",
+      "description": "",
+      "weight": "22",
+      "v_weight_unused": "0"
+    }
+  },
+  "nodevote": {
+    "vote_display": 1,
+    "vote_do": 1
+  },
+  "uri": "https://test.dj-junkies.de/js-api/node/171221"
+}
