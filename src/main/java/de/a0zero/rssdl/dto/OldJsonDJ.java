@@ -11,4 +11,7 @@ public class OldJsonDJ {
 	@SerializedName("djname")
 	public String djName;
 
+	@SerializedName("artistnid")
+	public int artistnid;
+
 }

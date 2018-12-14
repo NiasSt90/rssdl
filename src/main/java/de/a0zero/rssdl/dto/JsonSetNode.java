@@ -1,5 +1,6 @@
 package de.a0zero.rssdl.dto;
 
+import com.google.gson.JsonArray;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -40,14 +41,17 @@ public class JsonSetNode implements Serializable {
 	@SerializedName("dj")
 	private JsonDJ dj;
 
-	@SerializedName("artistnids")
-	private List<Integer> artistnids;
-
 	@SerializedName("duration")
 	private Integer duration;
 
 	@SerializedName("taxonomy")
 	private Map<Integer, JsonGenre> genre;
+
+	@SerializedName("artistNodes")
+	public JsonArtistNode artistNodes;
+
+	@SerializedName("artistdetection_disabled")
+	private int artistdetectionDisabled;
 
 	@SerializedName("votes")
 	private JsonVote vote;
@@ -88,13 +92,14 @@ public class JsonSetNode implements Serializable {
 	}
 
 
-	public List<Integer> getArtistnids() {
-		return artistnids;
+
+	public int getArtistdetectionDisabled() {
+		return artistdetectionDisabled;
 	}
 
 
-	public void setArtistnids(List<Integer> artistnids) {
-		this.artistnids = artistnids;
+	public void setArtistdetectionDisabled(int artistdetectionDisabled) {
+		this.artistdetectionDisabled = artistdetectionDisabled;
 	}
 
 

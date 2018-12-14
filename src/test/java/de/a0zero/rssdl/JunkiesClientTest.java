@@ -13,7 +13,6 @@ import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import retrofit2.Response;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -73,15 +72,11 @@ class JunkiesClientTest {
 
 		final JsonSetNode jsonSetNode = new JsonSetNode(0);
 		jsonSetNode.setStatus(0);
-		jsonSetNode.setTitle("Mein Test Create");
-		JsonDJ dj = new JsonDJ(56151, "michael canitrot");
-		dj.setNid(130568);
-		jsonSetNode.setDj(dj);
-		jsonSetNode.setDuration(100);
+		jsonSetNode.setTitle("Eelke Kleijn - Mein Test Create");
+		//jsonSetNode.artistNodes = new JsonArtistNode(dj.artistnid, "Eelke Kleijn");
+		jsonSetNode.setArtistdetectionDisabled(0);
 		jsonSetNode.setCreated(new Date());
 		jsonSetNode.setSetcreated(new Date());
-		jsonSetNode.setArtistnids(Collections.singletonList(130568));
-
 		final Response<JsonSetNode> response = api.createSet(jsonSetNode).execute();
 		Assertions.assertEquals(response.code(), 200);
 
