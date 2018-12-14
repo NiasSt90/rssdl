@@ -6,12 +6,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
  * User: Markus Schulz <msc@0zero.de>
  */
 public class LocalFileDupCheck implements SetDuplicateCheck {
+
+	private static final Logger log = Logger.getLogger(LocalFileDupCheck.class.getName());
 
 	private final Properties db;
 
@@ -24,7 +28,7 @@ public class LocalFileDupCheck implements SetDuplicateCheck {
 				db.load(new FileReader(file));
 			}
 			catch (IOException e) {
-				e.printStackTrace();
+				log.log(Level.SEVERE, e, () -> String.format("Can't load Duplicate-DB %s!", filename));
 			}
 		}
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> save(filename)));
@@ -36,7 +40,7 @@ public class LocalFileDupCheck implements SetDuplicateCheck {
 			db.store(writer, "Save new DB");
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			log.log(Level.SEVERE, e, () -> String.format("Can't save Duplicate-DB to %s!", filename));
 		}
 	}
 

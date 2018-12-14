@@ -43,13 +43,5 @@ public class Main {
 
 	static {
 		System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tF %1$tT] [%4$4.4s] %5$s %n");
-/*
-		InputStream stream = Main.class.getClassLoader().getResourceAsStream("logging.properties");
-		try {
-			LogManager.getLogManager().readConfiguration(stream);
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
 	}
 }
