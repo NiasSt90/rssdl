@@ -2,4 +2,4 @@ http://podcast.hernancattaneo.com/feed.xml
 http://feeds.soundcloud.com/users/soundcloud:users:1525250/sounds.rss
 http://feeds.soundcloud.com/users/soundcloud:users:215315/sounds.rss
 https://hearthis.at/globalsets/podcast/
-https://residance.podbean.com/feed.xml
+#https://residance.podbean.com/feed.xml

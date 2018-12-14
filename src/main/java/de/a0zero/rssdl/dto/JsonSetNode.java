@@ -47,12 +47,6 @@ public class JsonSetNode implements Serializable {
 	@SerializedName("taxonomy")
 	private Map<Integer, JsonGenre> genre;
 
-	@SerializedName("artistNodes")
-	public JsonArtistNode artistNodes;
-
-	@SerializedName("artistdetection_disabled")
-	private int artistdetectionDisabled;
-
 	@SerializedName("votes")
 	private JsonVote vote;
 
@@ -90,18 +84,6 @@ public class JsonSetNode implements Serializable {
 	public int getNid() {
 		return nid;
 	}
-
-
-
-	public int getArtistdetectionDisabled() {
-		return artistdetectionDisabled;
-	}
-
-
-	public void setArtistdetectionDisabled(int artistdetectionDisabled) {
-		this.artistdetectionDisabled = artistdetectionDisabled;
-	}
-
 
 	public String getType() {
 		return type;

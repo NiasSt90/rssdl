@@ -13,12 +13,16 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
  * User: Markus Schulz <msc@0zero.de>
  */
 public class OkHttpDownloader implements FileDownloader {
+
+	private static final Logger log = Logger.getLogger(OkHttpDownloader.class.getName());
 
 	private final MainArguments arguments;
 
@@ -34,6 +38,7 @@ public class OkHttpDownloader implements FileDownloader {
 			if (response.isSuccessful() && response.body() != null) {
 				final InputStream source = response.body().byteStream();
 				final File file = File.createTempFile("rssdl_", type);
+				file.deleteOnExit();
 				FileUtils.copyInputStreamToFile(source, file);
 				response.close();
 				return file;
@@ -45,13 +50,13 @@ public class OkHttpDownloader implements FileDownloader {
 
 	@Override
 	public void downloadSet(int nodeID, SyndEntry entry, SyndEnclosure file) {
+		String targetFileName = calculateTargetFilenameWithPath(nodeID, entry, file);
 		try {
-			String targetFileName = calculateTargetFilenameWithPath(nodeID, entry, file);
 			final File targetFile = new File(targetFileName);
 			if (!targetFile.exists() || targetFile.length() != file.getLength()) {
-				System.out.println("Try downloading " + file.getUrl());
+				log.log(Level.INFO, () -> "Start downloading " + file.getUrl());
 				ProgressBar progressBar = null;
-				if (arguments.downloadParallel == 1) {
+				if (!MainArguments.quiet && arguments.downloadParallel == 1) {
 					progressBar = new ProgressBar("" + nodeID, file.getLength(), ProgressBarStyle.UNICODE_BLOCK).start();
 				}
 				final Response response = new Progress().run(new URL(file.getUrl()), progressBar);
@@ -65,17 +70,17 @@ public class OkHttpDownloader implements FileDownloader {
 				}
 			}
 			else {
-				System.out.println("Skipping " + nodeID + " file exists with same size " + targetFile);
+				log.log(Level.INFO, () -> "Skipping " + nodeID + " file exists with same size " + targetFile);
 			}
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			log.log(Level.SEVERE, e, () -> String.format("IOException from download %s to file %s", file.getUrl(), targetFileName));
 		}
 	}
 
 
 	private String calculateTargetFilenameWithPath(int node, SyndEntry entry, SyndEnclosure file) {
-		String targetPath = arguments.djJunkiesDownloadPath + node + "/";
+		String targetPath = arguments.djJunkiesDownloadPath + "/" + node + "/";
 		final String url = file.getUrl();
 		final String filename = new File(url).getName();
 		if (filename.endsWith(".mp3") || filename.endsWith(".m4a")) {

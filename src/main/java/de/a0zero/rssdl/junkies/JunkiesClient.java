@@ -1,6 +1,7 @@
 package de.a0zero.rssdl.junkies;
 
 import de.a0zero.rssdl.JunkiesAPI;
+import de.a0zero.rssdl.MainArguments;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
@@ -25,7 +26,7 @@ public class JunkiesClient {
 		return new Retrofit.Builder()
 				.baseUrl(endpointBaseURL)
 				.client(new OkHttpClient().newBuilder()
-						.addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
+						.addInterceptor(new HttpLoggingInterceptor().setLevel(MainArguments.verbose))
 						.readTimeout(2, TimeUnit.MINUTES)
 						.callTimeout(2, TimeUnit.MINUTES)
 						.cookieJar(new SessionCookieJar())

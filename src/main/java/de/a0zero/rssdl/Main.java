@@ -4,8 +4,11 @@ import com.beust.jcommander.JCommander;
 import de.a0zero.rssdl.download.OkHttpDownloader;
 import de.a0zero.rssdl.dto.JsonLoginResult;
 import de.a0zero.rssdl.junkies.JunkiesClient;
+import io.reactivex.Observable;
 
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -23,10 +26,12 @@ public class Main {
 			jCommander.usage();
 			return;
 		}
+		Observable.fromArray(Logger.getLogger( "" ).getHandlers())
+				.doOnNext(h -> h.setLevel(MainArguments.quiet ? Level.WARNING : Level.INFO))
+				.blockingSubscribe();
 
 		JunkiesAPI api = new JunkiesClient().api(myArgs.djJunkiesURL);
-		JsonLoginResult jsonLoginResult = api.login(myArgs.username, myArgs.password).blockingFirst();
-		System.out.println("Successful logged in " + jsonLoginResult.getSessionName());
+		api.login(myArgs.username, myArgs.password).blockingFirst();
 
 		SetDuplicateCheck duplicateCheck = new LocalFileDupCheck(myArgs.duplicateDB);
 		RssFeedDownloader downloader = new RssFeedDownloader(myArgs, api, new OkHttpDownloader(myArgs), duplicateCheck);

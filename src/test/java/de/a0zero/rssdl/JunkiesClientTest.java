@@ -1,11 +1,18 @@
 package de.a0zero.rssdl;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import de.a0zero.rssdl.dto.JsonDJ;
 import de.a0zero.rssdl.dto.JsonLoginResult;
 import de.a0zero.rssdl.dto.JsonSetNode;
 import de.a0zero.rssdl.dto.OldJsonDJ;
 import de.a0zero.rssdl.junkies.JunkiesClient;
+import de.a0zero.rssdl.junkies.create.CreateSetNode;
+import de.a0zero.rssdl.junkies.create.CreateSetNodeResult;
 import io.reactivex.Observable;
+import okhttp3.logging.HttpLoggingInterceptor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +20,7 @@ import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +31,9 @@ import java.util.List;
 @EnabledIfSystemProperty(named = "username", matches = ".+")
 class JunkiesClientTest {
 
+	static {
+		MainArguments.verbose = HttpLoggingInterceptor.Level.BODY;
+	}
 	private JunkiesAPI api = new JunkiesClient().client(new MainArguments().djJunkiesURL).create(JunkiesAPI.class);
 
 	private String username;
@@ -68,20 +79,23 @@ class JunkiesClientTest {
 
 	@Test
 	void createNode() throws Exception {
-		final String authToken = api.login(username, password).blockingFirst().getUser().getAuthToken();
+		api.login(username, password).blockingFirst().getUser().getAuthToken();
 
-		final JsonSetNode jsonSetNode = new JsonSetNode(0);
-		jsonSetNode.setStatus(0);
-		jsonSetNode.setTitle("Eelke Kleijn - Mein Test Create");
-		//jsonSetNode.artistNodes = new JsonArtistNode(dj.artistnid, "Eelke Kleijn");
-		jsonSetNode.setArtistdetectionDisabled(0);
-		jsonSetNode.setCreated(new Date());
-		jsonSetNode.setSetcreated(new Date());
-		final Response<JsonSetNode> response = api.createSet(jsonSetNode).execute();
+		final CreateSetNode node = new CreateSetNode();
+		node.status = 0;
+		node.title = "Eelke Kleijn - Mein Test Create";
+		node.fulltitle = "Eelke Kleijn - Mein Test Create";
+		node.artistnames = "Eelke Kleijn";
+		node.artistdetectionDisabled = 0;
+		node.created = new Date();
+		node.setSetCreated(new SimpleDateFormat("yyyy-MM-dd").parse("2011-04-20"));
+
+		Response<CreateSetNodeResult> response = api.createSet(node).execute();
 		Assertions.assertEquals(response.code(), 200);
+		int nid = response.body().nid;
+		Assertions.assertTrue(nid > 0);
 
-		final Response<Void> execute = api.forcemp3info(response.body().getNid()).execute();
+		final Response<Void> execute = api.forcemp3info(nid).execute();
 		Assertions.assertTrue(execute.isSuccessful());
-
 	}
 }
