@@ -70,7 +70,7 @@ public class OkHttpDownloader implements FileDownloader {
 				}
 			}
 			else {
-				log.log(Level.INFO, () -> "Skipping " + nodeID + " file exists with same size " + targetFile);
+				log.log(Level.FINE, () -> "Skipping " + nodeID + " file exists with same size " + targetFile);
 			}
 		}
 		catch (IOException e) {

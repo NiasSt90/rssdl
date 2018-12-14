@@ -21,22 +21,22 @@ public class MainArguments {
 	@Parameter(names = {"-log", "-verbose" }, description = "enable REST call logger", converter = HttpLoggingEnumConverter.class)
 	public static HttpLoggingInterceptor.Level verbose = HttpLoggingInterceptor.Level.NONE;
 
-	@Parameter(names = {"-q", "--quiet"}, description = "be quiet, no INFO logging and no progressBar for downloads")
+	@Parameter(names = {"-q", "--quiet"}, description = "be quiet, no DEBUG logging and no progressBar for downloads")
 	public static boolean quiet = false;
 
-	@Parameter(names = "-e", description = "Endpunkt URL für DJ-Junkies")
+	@Parameter(names = {"-e", "--endpoint"}, description = "Endpunkt URL für DJ-Junkies")
 	public String djJunkiesURL = "https://test.dj-junkies.de/";
 
-	@Parameter(names = "-u", description = "Login DJ-Junkies")
+	@Parameter(names = {"-u", "--username"}, description = "Login DJ-Junkies")
 	public String username;
 
-	@Parameter(names = "-p", description = "Passwort DJ-Junkies", password = false)
+	@Parameter(names = {"-p", "--password"}, description = "Passwort DJ-Junkies", password = false)
 	public String password;
 
-	@Parameter(names = "-d", description = "Pfad zur DuplicateCheck-DB")
+	@Parameter(names = {"-d", "--duplicate-db"}, description = "Pfad zur DuplicateCheck-DB")
 	public String duplicateDB = "dups.properties";
 
-	@Parameter(names = "-t", description = "Download Pfad wo die MP3/M4A abgelegt werden. ($target/$nid/$file).")
+	@Parameter(names = {"-t", "--target-path"}, description = "Download Pfad wo die MP3/M4A abgelegt werden. ($target/$nid/$file).")
 	public String djJunkiesDownloadPath = "./";
 
 	@Parameter(names = "--parallel", description = "Anzahl an Threads die parallel Downloaded dürfen.")
@@ -45,7 +45,7 @@ public class MainArguments {
 	@Parameter(names = "--not-before", description = "Skip RSS-Items published before this date", converter = ISO8601DateConverter.class)
 	public Date publishedNotBefore;
 
-	@Parameter(names = "-l", description = "Anzahl an Einträgen pro Feed die verarbeitet werden dürfen.")
+	@Parameter(names = {"-l", "--limit"}, description = "Anzahl an Einträgen pro Feed die verarbeitet werden dürfen.")
 	public int limitEntriesPerFeed = 1;
 
 	@Parameter(description = "Liste der RSS Feed URLs die verarbeitet werden sollen....")

@@ -27,7 +27,7 @@ public class Main {
 			return;
 		}
 		Observable.fromArray(Logger.getLogger( "" ).getHandlers())
-				.doOnNext(h -> h.setLevel(MainArguments.quiet ? Level.WARNING : Level.INFO))
+				.doOnNext(h -> h.setLevel(MainArguments.quiet ? Level.INFO : Level.FINE))
 				.blockingSubscribe();
 
 		JunkiesAPI api = new JunkiesClient().api(myArgs.djJunkiesURL);
