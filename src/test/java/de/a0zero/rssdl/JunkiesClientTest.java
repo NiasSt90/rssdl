@@ -4,6 +4,7 @@ import de.a0zero.rssdl.dto.JsonDJ;
 import de.a0zero.rssdl.dto.JsonLoginResult;
 import de.a0zero.rssdl.dto.JsonSetNode;
 import de.a0zero.rssdl.dto.OldJsonDJ;
+import de.a0zero.rssdl.junkies.JunkiesClient;
 import io.reactivex.Observable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +24,7 @@ import java.util.List;
 @EnabledIfSystemProperty(named = "username", matches = ".+")
 class JunkiesClientTest {
 
-	private JunkiesAPI api = new JunkiesClient().client().create(JunkiesAPI.class);
+	private JunkiesAPI api = new JunkiesClient().client(new MainArguments().djJunkiesURL).create(JunkiesAPI.class);
 
 	private String username;
 
@@ -78,6 +79,7 @@ class JunkiesClientTest {
 		jsonSetNode.setDj(dj);
 		jsonSetNode.setDuration(100);
 		jsonSetNode.setCreated(new Date());
+		jsonSetNode.setSetcreated(new Date());
 		jsonSetNode.setArtistnids(Collections.singletonList(130568));
 
 		final Response<JsonSetNode> response = api.createSet(jsonSetNode).execute();

@@ -3,6 +3,7 @@ package de.a0zero.rssdl.download;
 import com.rometools.rome.feed.synd.SyndEnclosure;
 import com.rometools.rome.feed.synd.SyndEntry;
 import de.a0zero.rssdl.FileDownloader;
+import de.a0zero.rssdl.MainArguments;
 import me.tongfei.progressbar.ProgressBar;
 import me.tongfei.progressbar.ProgressBarStyle;
 import okhttp3.Response;
@@ -18,6 +19,14 @@ import java.net.URL;
  * User: Markus Schulz <msc@0zero.de>
  */
 public class OkHttpDownloader implements FileDownloader {
+
+	private final MainArguments arguments;
+
+
+	public OkHttpDownloader(MainArguments arguments) {
+		this.arguments = arguments;
+	}
+
 
 	public File download(URL url, String type) throws IOException {
 		if (url.getProtocol().startsWith("http")) {
@@ -41,16 +50,19 @@ public class OkHttpDownloader implements FileDownloader {
 			final File targetFile = new File(targetFileName);
 			if (!targetFile.exists() || targetFile.length() != file.getLength()) {
 				System.out.println("Try downloading " + file.getUrl());
-				final ProgressBar progressBar =
-						new ProgressBar("" + nodeID, file.getLength(), ProgressBarStyle.UNICODE_BLOCK);
-				progressBar.start();
+				ProgressBar progressBar = null;
+				if (arguments.downloadParallel == 1) {
+					progressBar = new ProgressBar("" + nodeID, file.getLength(), ProgressBarStyle.UNICODE_BLOCK).start();
+				}
 				final Response response = new Progress().run(new URL(file.getUrl()), progressBar);
 				if (response.isSuccessful() && response.body() != null) {
 					final InputStream source = response.body().byteStream();
 					FileUtils.copyInputStreamToFile(source, targetFile);
 					response.close();
 				}
-				progressBar.stop();
+				if (progressBar != null) {
+					progressBar.stop();
+				}
 			}
 			else {
 				System.out.println("Skipping " + nodeID + " file exists with same size " + targetFile);
@@ -63,7 +75,7 @@ public class OkHttpDownloader implements FileDownloader {
 
 
 	private String calculateTargetFilenameWithPath(int node, SyndEntry entry, SyndEnclosure file) {
-		String targetPath = node + "/";
+		String targetPath = arguments.djJunkiesDownloadPath + node + "/";
 		final String url = file.getUrl();
 		final String filename = new File(url).getName();
 		if (filename.endsWith(".mp3") || filename.endsWith(".m4a")) {

@@ -1,4 +1,4 @@
-package de.a0zero.rssdl;
+package de.a0zero.rssdl.junkies;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -47,7 +47,7 @@ public class ManitobaGsonBuilder {
 		return gson;
 	}
 
-	static JsonSerializer<Date> ser = (src, typeOfSrc, context) -> src == null ? null : new JsonPrimitive(src.getTime());
+	static JsonSerializer<Date> ser = (src, typeOfSrc, context) -> src == null ? null : new JsonPrimitive(src.getTime() / 1000);
 
 	static JsonDeserializer<Date> deser =
 			(json, typeOfT, context) -> json == null ? null : new Date(1000 * json.getAsLong());

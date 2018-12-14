@@ -18,6 +18,13 @@
 
 
 	<dependencies>
+
+		<dependency>
+			<groupId>com.beust</groupId>
+			<artifactId>jcommander</artifactId>
+			<version>1.72</version>
+		</dependency>
+
 		<dependency>
 			<groupId>com.rometools</groupId>
 			<artifactId>rome</artifactId>
@@ -30,12 +37,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>2.8.2</version>
-		</dependency>
-
-		<dependency>
 			<groupId>com.squareup.retrofit2</groupId>
 			<artifactId>retrofit</artifactId>
 			<version>2.5.0</version>
@@ -44,6 +45,11 @@
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>logging-interceptor</artifactId>
 			<version>3.9.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.8.2</version>
 		</dependency>
 		<dependency>
 			<groupId>com.squareup.retrofit2</groupId>

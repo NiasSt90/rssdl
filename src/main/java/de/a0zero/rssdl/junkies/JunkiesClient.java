@@ -1,5 +1,6 @@
-package de.a0zero.rssdl;
+package de.a0zero.rssdl.junkies;
 
+import de.a0zero.rssdl.JunkiesAPI;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
@@ -20,14 +21,11 @@ import java.util.concurrent.TimeUnit;
  */
 public class JunkiesClient {
 
-	public static final String BASE_URL = "https://test.dj-junkies.de/";
-
-
-	Retrofit client() {
+	public Retrofit client(String endpointBaseURL) {
 		return new Retrofit.Builder()
-				.baseUrl(BASE_URL)
+				.baseUrl(endpointBaseURL)
 				.client(new OkHttpClient().newBuilder()
-						.addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE))
+						.addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
 						.readTimeout(2, TimeUnit.MINUTES)
 						.callTimeout(2, TimeUnit.MINUTES)
 						.cookieJar(new SessionCookieJar())
@@ -37,8 +35,8 @@ public class JunkiesClient {
 				.build();
 	}
 
-	public JunkiesAPI api() {
-		return client().create(JunkiesAPI.class);
+	public JunkiesAPI api(String endpointURL) {
+		return client(endpointURL).create(JunkiesAPI.class);
 	}
 
 	private static class SessionCookieJar implements CookieJar {
