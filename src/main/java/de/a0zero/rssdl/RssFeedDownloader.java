@@ -22,6 +22,8 @@ import retrofit2.Response;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -59,9 +61,10 @@ public class RssFeedDownloader {
 		final File download = downloader.download(url, ".xml");
 		SyndFeedInput input = new SyndFeedInput();
 		SyndFeed syndfeed = input.build(new XmlReader(download));
-
+		final List<SyndEntry> entries = new ArrayList<>(syndfeed.getEntries());
 		log.log(Level.INFO, () -> String.format("Start Handling %d entries from RSS Feed from %s (%s)", limit, syndfeed.getTitle(), url.toString()));
-		Flowable.fromIterable(syndfeed.getEntries())
+		entries.sort(Comparator.comparing(SyndEntry::getPublishedDate).reversed());
+		Flowable.fromIterable(entries)
 				.filter(e -> arguments.publishedNotBefore == null || arguments.publishedNotBefore.before(e.getPublishedDate()))
 				.limit(limit)
 				.parallel(arguments.downloadParallel)
@@ -79,6 +82,7 @@ public class RssFeedDownloader {
 		if (audioFiles.size() > 0) {
 			// (0) Create new Node
 			final int nid = createNode(entry);
+			if (nid <= 0) return;
 
 			//(1) Download
 			//TODO: RX-Stream und Retry wenn "Caused by: java.net.SocketException: Socket closed"
@@ -107,18 +111,28 @@ public class RssFeedDownloader {
 		node.setSetCreated(entry.getPublishedDate());
 		final Module module = entry.getModule(ITUNES_DTD);
 		EntryInformation entryInformation = (EntryInformation) module;
-		if (entryInformation != null && entryInformation.getAuthor() != null) {
-			node.artistnames = entryInformation.getAuthor();
-			node.title = entryInformation.getAuthor() + " - " + node.title;
-			node.fulltitle = node.title;
+		if (entryInformation != null) {
+			if (entryInformation.getAuthor() != null) {
+				node.artistnames = null;//entryInformation.getAuthor(); @disabled: findDJ macht keine exakt-phrase suche
+				node.title = entryInformation.getAuthor() + " - " + node.title;
+				node.fulltitle = node.title;
+			}
 		}
 		if (node.artistnames != null) {
+			//createNode erwartet das der "artistnames" als DJ vorhanden ist und eindeutig ist.
+			// wenn nicht kommt eine "falsche" REST Antwort (d.h. Status=200 aber content ist murks Array mit Text drin)
 			final List<OldJsonDJ> oldJsonDJS = api.findDJ(node.artistnames).blockingFirst();
 			if (oldJsonDJS.size() == 0 || oldJsonDJS.size() > 1) {
 				node.artistnames = null;
 			}
 		}
-		final CreateSetNodeResult body = api.createSet(node).execute().body();
+		final Response<CreateSetNodeResult> response = api.createSet(node).execute();
+		if (!response.isSuccessful()) {
+			log.log(Level.SEVERE, String.format("Can't create node guid=%s, status=%d, Error=%s",
+					entry.getUri(), response.code(), response.errorBody().string()));
+			return -1;
+		}
+		final CreateSetNodeResult body = response.body();
 		final int nid = body.nid;
 		duplicateCheck.addEntry(entry.getUri(), entry.getTitle(), nid);
 		log.log(Level.INFO, () -> String.format("Created Set %d title = %s, url = %s", nid, node.title, body.url));
