@@ -51,9 +51,10 @@ public class OkHttpDownloader implements FileDownloader {
 	@Override
 	public void downloadSet(int nodeID, SyndEntry entry, SyndEnclosure file) {
 		String targetFileName = calculateTargetFilenameWithPath(nodeID, entry, file);
+		final File targetFile = new File(targetFileName);
 		try {
-			final File targetFile = new File(targetFileName);
-			if (!targetFile.exists() || targetFile.length() != file.getLength()) {
+			//CHANGED: the file.getLength() tells not the truth in all cases, therefore we download again if diff > 5000 bytes
+			if (!targetFile.exists() || (file.getLength() > 0 && Math.abs(targetFile.length()-file.getLength()) > 5000)) {
 				log.log(Level.INFO, () -> "Start downloading " + file.getUrl());
 				ProgressBar progressBar = null;
 				if (!MainArguments.quiet && arguments.downloadParallel == 1) {
@@ -70,11 +71,12 @@ public class OkHttpDownloader implements FileDownloader {
 				}
 			}
 			else {
-				log.log(Level.FINE, () -> "Skipping " + nodeID + " file exists with same size " + targetFile);
+				log.log(Level.FINE, () -> "Skipping " + nodeID + " file already exists " + targetFile);
 			}
 		}
 		catch (IOException e) {
 			log.log(Level.SEVERE, e, () -> String.format("IOException from download %s to file %s", file.getUrl(), targetFileName));
+			targetFile.delete();//hopefully delete an incomplete download
 		}
 	}
 
