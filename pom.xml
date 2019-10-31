@@ -16,6 +16,10 @@
 		<junit.jupiter.version>5.3.2</junit.jupiter.version>
 	</properties>
 
+	<scm>
+		<connection>scm:git:git@github.com:NiasSt90/rssdl.git</connection>
+	</scm>
+
 
 	<dependencies>
 
