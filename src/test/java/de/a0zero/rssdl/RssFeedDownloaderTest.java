@@ -30,11 +30,13 @@ class RssFeedDownloaderTest {
 	@Test
 	void parse() throws Exception {
 		MainArguments arguments = new MainArguments();
+		arguments.allowLinkGrabbing = true;
 		SetDuplicateCheck duplicateCheck = new LocalFileDupCheck("target/dups.properties");
 		final JunkiesAPI api = new JunkiesClient().api(arguments.djJunkiesURL);
 		api.login(username, password).blockingFirst();
 		RssFeedDownloader downloader = new RssFeedDownloader(arguments, api, new OkHttpDownloader(arguments), duplicateCheck);
 		//downloader.parse(new URL("file:src/test/resources/eelke.xml"), 1);
-		downloader.parse(new URL("http://hearthis.at/globalsets/podcast/"), 1);
+		downloader.parse(new URL("http://feeds.feedburner.com/livesets"), 1);
+		//downloader.parse(new URL("http://hearthis.at/globalsets/podcast/"), 1);
 	}
 }

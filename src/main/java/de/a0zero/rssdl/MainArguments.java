@@ -48,6 +48,9 @@ public class MainArguments {
 	@Parameter(names = {"-l", "--limit"}, description = "Anzahl an Einträgen pro Feed die verarbeitet werden dürfen.")
 	public int limitEntriesPerFeed = 1;
 
+	@Parameter(names = {"--allow-linkgrabbing"}, description = "Erlaube das Grabbing von .mp3 Links in referenzierten HTML Seiten.")
+	public boolean allowLinkGrabbing = false;
+
 	@Parameter(description = "Liste der RSS Feed URLs die verarbeitet werden sollen....")
 	public List<String> rssFeedURLs = new ArrayList<>();
 

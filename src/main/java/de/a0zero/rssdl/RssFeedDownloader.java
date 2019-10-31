@@ -7,16 +7,21 @@ import com.google.gson.JsonPrimitive;
 import com.rometools.modules.itunes.EntryInformation;
 import com.rometools.rome.feed.module.Module;
 import com.rometools.rome.feed.synd.SyndEnclosure;
+import com.rometools.rome.feed.synd.SyndEnclosureImpl;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
+import com.rometools.utils.Strings;
 import de.a0zero.rssdl.dto.OldJsonDJ;
 import de.a0zero.rssdl.junkies.create.CreateSetNode;
 import de.a0zero.rssdl.junkies.create.CreateSetNodeResult;
 import io.reactivex.Flowable;
 import io.reactivex.schedulers.Schedulers;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import retrofit2.Response;
 
 import java.io.File;
@@ -76,9 +81,12 @@ public class RssFeedDownloader {
 	}
 
 	private void handleEntry(SyndEntry entry) throws IOException {
-		final List<SyndEnclosure> audioFiles = entry.getEnclosures().stream()
+		List<SyndEnclosure> audioFiles = entry.getEnclosures().stream()
 				.filter(e -> "audio/x-m4a".equals(e.getType()) || "audio/mpeg".equals(e.getType()))
 				.collect(Collectors.toList());
+		if (audioFiles.isEmpty() && arguments.allowLinkGrabbing) {
+			audioFiles = grabAudioFileLinks(entry);
+		}
 		if (audioFiles.size() > 0) {
 			// (0) Create new Node
 			final int nid = createNode(entry);
@@ -97,6 +105,25 @@ public class RssFeedDownloader {
 		else {
 			log.log(Level.WARNING, () -> String.format("RSS-Item %s hat keine Audio-Dateien!", entry.getUri()));
 		}
+	}
+
+	private List<SyndEnclosure> grabAudioFileLinks(SyndEntry entry) {
+		List<SyndEnclosure> result = new ArrayList<>();
+		if (!Strings.isBlank(entry.getLink())) {
+			try {
+				Document doc = Jsoup.parse(new URL(entry.getLink()), 5000);
+				Elements links = doc.select("a[href$=.mp3]");
+				links.forEach(e -> {
+					SyndEnclosureImpl syndEnclosure = new SyndEnclosureImpl();
+					syndEnclosure.setUrl(e.attr("href"));
+					syndEnclosure.setType("audio/mpeg");
+					result.add(syndEnclosure);
+				});
+			} catch (IOException e) {
+				log.log(Level.SEVERE, () -> "Can't fetch/parse url " + entry.getLink());
+			}
+		}
+		return result;
 	}
 
 
