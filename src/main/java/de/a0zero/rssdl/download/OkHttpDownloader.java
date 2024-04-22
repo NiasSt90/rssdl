@@ -42,6 +42,10 @@ public class OkHttpDownloader implements FileDownloader {
 					FileUtils.copyInputStreamToFile(source, file);
 					return file;
 				}
+				else {
+					throw new IOException("Could not download file: " + url +
+												 " code = " + response.code() + ", reason = " + response.message());
+				}
 			}
 		}
 		return new File(url.getFile());
