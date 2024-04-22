@@ -2,13 +2,10 @@ package de.a0zero.rssdl;
 
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.converters.EnumConverter;
 import com.beust.jcommander.converters.ISO8601DateConverter;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -48,11 +45,17 @@ public class MainArguments {
 	@Parameter(names = {"-l", "--limit"}, description = "Anzahl an Einträgen pro Feed die verarbeitet werden dürfen.")
 	public int limitEntriesPerFeed = 1;
 
+	@Parameter(names = {"-m", "--min-duration"}, description = "ignoriere RSS-Items mit Laufzeit kleiner als (in Minuten)")
+	public int minDuration = 0;
+
 	@Parameter(names = {"--allow-linkgrabbing"}, description = "Erlaube das Grabbing von .mp3 Links in referenzierten HTML Seiten.")
 	public boolean allowLinkGrabbing = false;
 
 	@Parameter(description = "Liste der RSS Feed URLs die verarbeitet werden sollen....")
 	public List<String> rssFeedURLs = new ArrayList<>();
+
+	@Parameter(names = "--dry-run", description = "Dry-Run, kein Download der Sets sondern nur Log-Ausgaben erzeugen....")
+	public boolean dryRun = false;
 
 	private static class HttpLoggingEnumConverter implements IStringConverter<HttpLoggingInterceptor.Level> {
 

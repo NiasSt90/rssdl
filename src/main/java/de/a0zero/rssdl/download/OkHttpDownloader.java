@@ -34,14 +34,14 @@ public class OkHttpDownloader implements FileDownloader {
 
 	public File download(URL url, String type) throws IOException {
 		if (url.getProtocol().startsWith("http")) {
-			final Response response = new Progress().run(url, null);
-			if (response.isSuccessful() && response.body() != null) {
-				final InputStream source = response.body().byteStream();
-				final File file = File.createTempFile("rssdl_", type);
-				file.deleteOnExit();
-				FileUtils.copyInputStreamToFile(source, file);
-				response.close();
-				return file;
+			try (Response response = new Progress().run(url, null)) {
+				if (response.isSuccessful() && response.body() != null) {
+					final InputStream source = response.body().byteStream();
+					final File file = File.createTempFile("rssdl_", type);
+					file.deleteOnExit();
+					FileUtils.copyInputStreamToFile(source, file);
+					return file;
+				}
 			}
 		}
 		return new File(url.getFile());
@@ -52,6 +52,10 @@ public class OkHttpDownloader implements FileDownloader {
 	public void downloadSet(int nodeID, SyndEntry entry, SyndEnclosure file) {
 		String targetFileName = calculateTargetFilenameWithPath(nodeID, entry, file);
 		final File targetFile = new File(targetFileName);
+		if (arguments.dryRun) {
+			log.info("Dry-Run: download " + file.getUrl() + " to filename " + targetFileName);
+			return;
+		}
 		try {
 			//CHANGED: the file.getLength() tells not the truth in all cases, therefore we download again if diff > 5000 bytes
 			if (!targetFile.exists() || (file.getLength() > 0 && Math.abs(targetFile.length()-file.getLength()) > 5000)) {
@@ -60,11 +64,11 @@ public class OkHttpDownloader implements FileDownloader {
 				if (!MainArguments.quiet && arguments.downloadParallel == 1) {
 					progressBar = new ProgressBar("" + nodeID, file.getLength(), ProgressBarStyle.UNICODE_BLOCK).start();
 				}
-				final Response response = new Progress().run(new URL(file.getUrl()), progressBar);
-				if (response.isSuccessful() && response.body() != null) {
-					final InputStream source = response.body().byteStream();
-					FileUtils.copyInputStreamToFile(source, targetFile);
-					response.close();
+				try (Response response = new Progress().run(new URL(file.getUrl()), progressBar)) {
+					if (response.isSuccessful() && response.body() != null) {
+						final InputStream source = response.body().byteStream();
+						FileUtils.copyInputStreamToFile(source, targetFile);
+					}
 				}
 				if (progressBar != null) {
 					progressBar.stop();

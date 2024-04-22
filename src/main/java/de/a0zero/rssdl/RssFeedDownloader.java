@@ -19,6 +19,7 @@ import de.a0zero.rssdl.junkies.create.CreateSetNode;
 import de.a0zero.rssdl.junkies.create.CreateSetNodeResult;
 import io.reactivex.Flowable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -27,6 +28,7 @@ import retrofit2.Response;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -71,6 +73,7 @@ public class RssFeedDownloader {
 		entries.sort(Comparator.comparing(SyndEntry::getPublishedDate).reversed());
 		Flowable.fromIterable(entries)
 				.filter(e -> arguments.publishedNotBefore == null || arguments.publishedNotBefore.before(e.getPublishedDate()))
+				.filter(this::filterByDuration)
 				.limit(limit)
 				.parallel(arguments.downloadParallel)
 				.runOn(Schedulers.io())
@@ -80,6 +83,18 @@ public class RssFeedDownloader {
 		log.log(Level.INFO, () -> String.format("Finished %d entries from RSS Feed %s",  limit, url.toString()));
 	}
 
+	private boolean filterByDuration(SyndEntry entry) {
+		if (arguments.minDuration == 0) return true;
+		EntryInformation entryInfo = (EntryInformation) entry.getModule(ITUNES_DTD);
+		if (entryInfo == null || entryInfo.getDuration() == null) {
+			log.warning("FilterByDuration enabled (>=" + arguments.minDuration + " min) but no duration information for this entry UID/Title: "
+							+ entry.getUri() + "/" + entry.getTitle());
+			return true;
+		}
+		return Duration.ofMinutes(arguments.minDuration)
+						 .compareTo(Duration.ofMillis(entryInfo.getDuration().getMilliseconds())) < 0;
+	}
+
 	private void handleEntry(SyndEntry entry) throws IOException {
 		List<SyndEnclosure> audioFiles = entry.getEnclosures().stream()
 				.filter(e -> "audio/x-m4a".equals(e.getType()) || "audio/mpeg".equals(e.getType()))
@@ -87,7 +102,7 @@ public class RssFeedDownloader {
 		if (audioFiles.isEmpty() && arguments.allowLinkGrabbing) {
 			audioFiles = grabAudioFileLinks(entry);
 		}
-		if (audioFiles.size() > 0) {
+		if (!audioFiles.isEmpty()) {
 			// (0) Create new Node
 			final int nid = createNode(entry);
 			if (nid <= 0) return;
@@ -97,10 +112,10 @@ public class RssFeedDownloader {
 			audioFiles.forEach(file -> downloader.downloadSet(nid, entry, file));
 
 			//(2) Force Trackinfo Update on site...
-			api.forcemp3info(nid).execute();
+			if (!arguments.dryRun) api.forcemp3info(nid).execute();
 
 			//(3) Publish the new Set now...
-			publishNode(nid);
+			if (!arguments.dryRun) publishNode(nid);
 		}
 		else {
 			log.log(Level.WARNING, () -> String.format("RSS-Item %s hat keine Audio-Dateien!", entry.getUri()));
@@ -149,14 +164,20 @@ public class RssFeedDownloader {
 			//createNode erwartet das der "artistnames" als DJ vorhanden ist und eindeutig ist.
 			// wenn nicht kommt eine "falsche" REST Antwort (d.h. Status=200 aber content ist murks Array mit Text drin)
 			final List<OldJsonDJ> oldJsonDJS = api.findDJ(node.artistnames).blockingFirst();
-			if (oldJsonDJS.size() == 0 || oldJsonDJS.size() > 1) {
+			if (oldJsonDJS.size() != 1) {
 				node.artistnames = null;
 			}
 		}
+		if (arguments.dryRun) {
+			log.log(Level.INFO, "Dry-Run: RSS-Entry {1} / {2} => {0}", new Object[]{node, entry.getUri(), entry.getTitle()});
+			return 1;
+		}
 		final Response<CreateSetNodeResult> response = api.createSet(node).execute();
 		if (!response.isSuccessful()) {
-			log.log(Level.SEVERE, String.format("Can't create node guid=%s, status=%d, Error=%s",
-					entry.getUri(), response.code(), response.errorBody().string()));
+			try (ResponseBody responseBody = response.errorBody()) {
+				log.log(Level.SEVERE, String.format("Can't create node guid=%s, status=%d, Error=%s",
+						entry.getUri(), response.code(), responseBody != null ? responseBody.string() : "<no-response-body>"));
+			}
 			return -1;
 		}
 		final CreateSetNodeResult body = response.body();
