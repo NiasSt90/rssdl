@@ -71,7 +71,7 @@ public class RssFeedDownloader {
 		final List<SyndEntry> entries = new ArrayList<>(syndfeed.getEntries());
 		log.log(Level.INFO, () -> String.format("Start Handling %d entries from RSS Feed from %s (%s)", limit, syndfeed.getTitle(), url.toString()));
 		entries.sort(Comparator.comparing(SyndEntry::getPublishedDate).reversed());
-		Flowable.fromIterable(entries)
+		Long count = Flowable.fromIterable(entries)
 				.filter(e -> arguments.publishedNotBefore == null || arguments.publishedNotBefore.before(e.getPublishedDate()))
 				.filter(this::filterByDuration)
 				.limit(limit)
@@ -79,8 +79,9 @@ public class RssFeedDownloader {
 				.runOn(Schedulers.io())
 				.doOnNext(this::handleEntry)
 				.sequential()
-				.blockingSubscribe();
-		log.log(Level.INFO, () -> String.format("Finished %d entries from RSS Feed %s",  limit, url.toString()));
+				.count()
+				.blockingGet();
+		log.log(Level.INFO, () -> String.format("Finished %d entries from RSS Feed %s",  count, url.toString()));
 	}
 
 	private boolean filterByDuration(SyndEntry entry) {
