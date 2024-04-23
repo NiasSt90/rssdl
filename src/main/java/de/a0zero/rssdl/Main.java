@@ -41,6 +41,7 @@ public class Main {
 		for (String url : myArgs.rssFeedURLs) {
 			try {
 				downloader.parse(new URL(url), myArgs.limitEntriesPerFeed);
+				api.login(myArgs.username, myArgs.password).blockingFirst();//Cookie-Session is not long enough...
 			}
 			catch (Exception e) {
 				log.error("Error on rss-feed " + url + ": " + e.getMessage(), e);

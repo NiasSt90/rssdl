@@ -15,12 +15,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
  * User: Markus Schulz <msc@0zero.de>
  */
 public class JunkiesClient {
+
+	private static final Logger log = Logger.getLogger(JunkiesClient.class.getName());
 
 	public Retrofit client(String endpointBaseURL) {
 		return new Retrofit.Builder()
@@ -47,6 +51,7 @@ public class JunkiesClient {
 		@Override
 		public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
 			if (url.encodedPath().endsWith("login")) {
+				log.log(Level.INFO, "Saving login cookie:" + cookies);
 				this.cookies = new ArrayList<>(cookies);
 			}
 		}
