@@ -5,7 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.rometools.modules.itunes.EntryInformation;
-import com.rometools.rome.feed.module.Module;
 import com.rometools.rome.feed.synd.SyndEnclosure;
 import com.rometools.rome.feed.synd.SyndEnclosureImpl;
 import com.rometools.rome.feed.synd.SyndEntry;
@@ -46,6 +45,7 @@ public class RssFeedDownloader {
 	private static final Logger log = Logger.getLogger(RssFeedDownloader.class.getName());
 
 	public static final String ITUNES_DTD = "http://www.itunes.com/dtds/podcast-1.0.dtd";
+	public static final String ITUNES_DTD_HTTPS = "https://www.itunes.com/dtds/podcast-1.0.dtd";
 
 	private final MainArguments arguments;
 
@@ -85,7 +85,7 @@ public class RssFeedDownloader {
 
 	private boolean filterByDuration(SyndEntry entry) {
 		if (arguments.minDuration == 0) return true;
-		EntryInformation entryInfo = (EntryInformation) entry.getModule(ITUNES_DTD);
+		final EntryInformation entryInfo = getItunesModule(entry);
 		if (entryInfo == null || entryInfo.getDuration() == null) {
 			log.warning("FilterByDuration enabled (>=" + arguments.minDuration + " min) but no duration information for this entry UID/Title: "
 							+ entry.getUri() + "/" + entry.getTitle());
@@ -94,6 +94,7 @@ public class RssFeedDownloader {
 		return Duration.ofMinutes(arguments.minDuration)
 						 .compareTo(Duration.ofMillis(entryInfo.getDuration().getMilliseconds())) < 0;
 	}
+
 
 	private void handleEntry(SyndEntry entry) throws IOException {
 		List<SyndEnclosure> audioFiles = entry.getEnclosures().stream()
@@ -122,6 +123,7 @@ public class RssFeedDownloader {
 		}
 	}
 
+
 	private List<SyndEnclosure> grabAudioFileLinks(SyndEntry entry) {
 		List<SyndEnclosure> result = new ArrayList<>();
 		if (!Strings.isBlank(entry.getLink())) {
@@ -141,7 +143,6 @@ public class RssFeedDownloader {
 		return result;
 	}
 
-
 	private int createNode(SyndEntry entry) throws IOException {
 		final Integer nodeId = duplicateCheck.getNodeId(entry.getUri());
 		if (nodeId != null) return nodeId;
@@ -151,8 +152,7 @@ public class RssFeedDownloader {
 		node.title = entry.getTitle();
 		node.created = new Date();
 		node.setSetCreated(entry.getPublishedDate());
-		final Module module = entry.getModule(ITUNES_DTD);
-		EntryInformation entryInformation = (EntryInformation) module;
+		EntryInformation entryInformation = getItunesModule(entry);
 		if (entryInformation != null) {
 			if (entryInformation.getAuthor() != null) {
 				node.artistnames = null;//entryInformation.getAuthor(); @disabled: findDJ macht keine exakt-phrase suche
@@ -169,7 +169,7 @@ public class RssFeedDownloader {
 			}
 		}
 		if (arguments.dryRun) {
-			log.log(Level.INFO, "Dry-Run: RSS-Entry {1} / {2} => {0}", new Object[]{node, entry.getUri(), entry.getTitle()});
+			log.log(Level.INFO, "Dry-Run: RSS-Entry published at {3}, {1} / {2} => {0}", new Object[]{node, entry.getUri(), entry.getTitle(), entry.getPublishedDate()});
 			return 1;
 		}
 		final Response<CreateSetNodeResult> response = api.createSet(node).execute();
@@ -205,5 +205,11 @@ public class RssFeedDownloader {
 				log.log(Level.WARNING, () -> String.format("Set %d hat keine Tracks und wird daher nicht aktiviert!", nid));
 			}
 		}
+	}
+
+
+	private static EntryInformation getItunesModule(SyndEntry entry) {
+		EntryInformation entryInfo = (EntryInformation) entry.getModule(ITUNES_DTD);
+		return entryInfo != null ? entryInfo : (EntryInformation) entry.getModule(ITUNES_DTD_HTTPS);
 	}
 }

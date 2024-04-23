@@ -43,7 +43,7 @@ public class MainArguments {
 	public Date publishedNotBefore;
 
 	@Parameter(names = {"-l", "--limit"}, description = "Anzahl an Einträgen pro Feed die verarbeitet werden dürfen.")
-	public int limitEntriesPerFeed = 1;
+	public int limitEntriesPerFeed = Integer.MAX_VALUE;
 
 	@Parameter(names = {"-m", "--min-duration"}, description = "ignoriere RSS-Items mit Laufzeit kleiner als (in Minuten)")
 	public int minDuration = 0;
