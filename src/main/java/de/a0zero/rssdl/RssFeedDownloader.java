@@ -99,7 +99,7 @@ public class RssFeedDownloader {
 
 	private void handleEntry(SyndEntry entry) throws IOException {
 		List<SyndEnclosure> audioFiles = entry.getEnclosures().stream()
-				.filter(e -> "audio/x-m4a".equals(e.getType()) || "audio/mpeg".equals(e.getType()))
+				.filter(e -> "audio/x-m4a".equals(e.getType()) || "audio/mpeg".equals(e.getType()) || "audio/mp4".equals(e.getType()))
 				.collect(Collectors.toList());
 		if (audioFiles.isEmpty() && arguments.allowLinkGrabbing) {
 			audioFiles = grabAudioFileLinks(entry);
@@ -120,7 +120,8 @@ public class RssFeedDownloader {
 			if (!arguments.dryRun) publishNode(nid);
 		}
 		else {
-			log.log(Level.WARNING, () -> String.format("RSS-Item %s hat keine Audio-Dateien!", entry.getUri()));
+			log.log(Level.WARNING, () -> String.format("RSS-Item %s hat keine Audio-Dateien! Enclosure:%s", entry.getUri(),
+					entry.getEnclosures()));
 		}
 	}
 
