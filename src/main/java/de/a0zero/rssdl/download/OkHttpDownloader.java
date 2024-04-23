@@ -33,22 +33,10 @@ public class OkHttpDownloader implements FileDownloader {
 
 
 	public File download(URL url, String type) throws IOException {
-		if (url.getProtocol().startsWith("http")) {
-			try (Response response = new Progress().run(url, null)) {
-				if (response.isSuccessful() && response.body() != null) {
-					final InputStream source = response.body().byteStream();
-					final File file = File.createTempFile("rssdl_", type);
-					file.deleteOnExit();
-					FileUtils.copyInputStreamToFile(source, file);
-					return file;
-				}
-				else {
-					throw new IOException("Could not download file: " + url +
-												 " code = " + response.code() + ", reason = " + response.message());
-				}
-			}
-		}
-		return new File(url.getFile());
+		final File target = File.createTempFile("rssdl_", type);
+		target.deleteOnExit();
+		FileUtils.copyURLToFile(url, target);
+		return target;
 	}
 
 
