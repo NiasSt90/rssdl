@@ -47,6 +47,8 @@ public class RssFeedDownloader {
 	public static final String ITUNES_DTD = "http://www.itunes.com/dtds/podcast-1.0.dtd";
 	public static final String ITUNES_DTD_HTTPS = "https://www.itunes.com/dtds/podcast-1.0.dtd";
 
+	public static final int TITLE_MAX_LENGTH = 255;
+
 	private final MainArguments arguments;
 
 	private final FileDownloader downloader;
@@ -162,6 +164,12 @@ public class RssFeedDownloader {
 				node.fulltitle = node.title;
 			}
 		}
+		if (node.title != null && node.title.length() > TITLE_MAX_LENGTH) {
+			node.title = node.title.substring(0, TITLE_MAX_LENGTH);
+		}
+		if (node.fulltitle != null && node.fulltitle.length() > TITLE_MAX_LENGTH) {
+			node.fulltitle = node.fulltitle.substring(0, TITLE_MAX_LENGTH);
+		}
 		if (node.artistnames != null) {
 			//createNode erwartet das der "artistnames" als DJ vorhanden ist und eindeutig ist.
 			// wenn nicht kommt eine "falsche" REST Antwort (d.h. Status=200 aber content ist murks Array mit Text drin)
@@ -177,30 +185,30 @@ public class RssFeedDownloader {
 		final Response<CreateSetNodeResult> response = api.createSet(node).execute();
 		if (!response.isSuccessful()) {
 			try (ResponseBody responseBody = response.errorBody()) {
-				log.log(Level.SEVERE, String.format("Can't create node guid=%s, status=%d, Error=%s",
-						entry.getUri(), response.code(), responseBody != null ? responseBody.string() : "<no-response-body>"));
+				log.log(Level.SEVERE, String.format("Can't create node %s with guid=%s, status=%d, Error=%s",
+						node, entry.getUri(), response.code(), responseBody != null ? responseBody.string() : "<no-response-body>"));
 			}
 			return -1;
 		}
 		final CreateSetNodeResult body = response.body();
 		final int nid = body.nid;
 		duplicateCheck.addEntry(entry.getUri(), entry.getTitle(), nid);
-		log.log(Level.INFO, () -> String.format("Created Set %d title = %s, url = %s", nid, node.title, body.url));
+		log.log(Level.INFO, () -> String.format("Created Set ID=%d %s, url = %s", nid, node, body.url));
 		return nid;
 	}
 
 
-	private void publishNode(int nid) throws IOException {
+	public void publishNode(int nid) throws IOException {
 		final Response<JsonObject> rawLoad = api.rawLoad(nid).execute();
 		final JsonObject rawSet = rawLoad.body();
 		if ("0".equals(rawSet.get("status").getAsString())) {
 			final JsonElement trackinfo = rawSet.get("trackinfo");
-			if (trackinfo instanceof JsonArray && ((JsonArray) trackinfo).size() > 0) {
+			if (trackinfo instanceof JsonArray && !((JsonArray) trackinfo).isEmpty()) {
 				rawSet.add("status", new JsonPrimitive(1));
 				final Response<JsonObject> rawUpdate = api.rawUpdate(nid, rawSet).execute();
 				if (!rawUpdate.isSuccessful()) {
 					log.log(Level.SEVERE,
-							() -> String.format("Set %d konnte nicht veröffentlicht werden! Http-Status=%d", nid, rawUpdate.code()));
+							() -> String.format("Set %d konnte nicht veröffentlicht werden! Http-Status=%d body=%s", nid, rawUpdate.code(), rawUpdate.errorBody()));
 				}
 			}
 			else {
