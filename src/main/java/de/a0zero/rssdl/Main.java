@@ -33,15 +33,16 @@ public class Main {
 				.doOnNext(h -> h.setLevel(MainArguments.quiet ? Level.INFO : Level.FINE))
 				.blockingSubscribe();
 
-		JunkiesAPI api = new JunkiesClient().api(myArgs.djJunkiesURL);
-		api.login(myArgs.username, myArgs.password).blockingFirst();
-
 		SetDuplicateCheck duplicateCheck = new LocalFileDupCheck(myArgs.duplicateDB);
-		RssFeedDownloader downloader = new RssFeedDownloader(myArgs, api, new OkHttpDownloader(myArgs), duplicateCheck);
+
 		for (String url : myArgs.rssFeedURLs) {
 			try {
+				log.info("START FEED " + url);
+				//WORKAROUND: da es Probleme mit der Laufzeit der PHP-Session (Cookie basiert) gibt wird pro Feed der Client/Downloader neu erstellt....
+				JunkiesAPI api = new JunkiesClient().api(myArgs.djJunkiesURL);
+				api.login(myArgs.username, myArgs.password).blockingFirst();
+				RssFeedDownloader downloader = new RssFeedDownloader(myArgs, api, new OkHttpDownloader(myArgs), duplicateCheck);
 				downloader.parse(new URL(url), myArgs.limitEntriesPerFeed);
-				api.login(myArgs.username, myArgs.password).blockingFirst();//Cookie-Session is not long enough...
 			}
 			catch (Exception e) {
 				log.error("Error on rss-feed " + url + ": " + e.getMessage(), e);

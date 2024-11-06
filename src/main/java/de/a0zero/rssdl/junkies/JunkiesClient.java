@@ -60,6 +60,7 @@ public class JunkiesClient {
 		@Override
 		public List<Cookie> loadForRequest(HttpUrl url) {
 			if (!url.encodedPath().endsWith("login") && cookies != null) {
+				log.log(Level.INFO, "Using login cookie:" + cookies + " for Request " + url);
 				return cookies;
 			}
 			return Collections.emptyList();
