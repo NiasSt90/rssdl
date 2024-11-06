@@ -41,22 +41,21 @@ public class OkHttpDownloader implements FileDownloader {
 
 
 	@Override
-	public void downloadSet(int nodeID, SyndEntry entry, SyndEnclosure file) {
-		String targetFileName = calculateTargetFilenameWithPath(nodeID, entry, file);
+	public void downloadSet(int nodeID, SyndEntry entry, SyndEnclosure rssFile) {
+		String targetFileName = calculateTargetFilenameWithPath(nodeID, entry, rssFile);
 		final File targetFile = new File(targetFileName);
 		if (arguments.dryRun) {
-			log.info("Dry-Run: download " + file.getUrl() + " to filename " + targetFileName);
+			log.info("Dry-Run: " + (targetFile.exists() ? "already exists " : "Downloading " + rssFile.getUrl() + " to ") +  targetFileName);
 			return;
 		}
 		try {
-			//CHANGED: the file.getLength() tells not the truth in all cases, therefore we download again if diff > 5000 bytes
-			if (!targetFile.exists() || (file.getLength() > 0 && Math.abs(targetFile.length()-file.getLength()) > 5000)) {
-				log.log(Level.INFO, () -> "Start downloading " + file.getUrl());
+			if (!targetFile.exists() || (targetFile.length() == 0)) {
+				log.log(Level.INFO, () -> String.format("Start downloading(%b/%d) %s to %s", targetFile.exists(), rssFile.getLength(), rssFile.getUrl(), targetFile));
 				ProgressBar progressBar = null;
 				if (!MainArguments.quiet && arguments.downloadParallel == 1) {
-					progressBar = new ProgressBar("" + nodeID, file.getLength(), ProgressBarStyle.UNICODE_BLOCK).start();
+					progressBar = new ProgressBar("" + nodeID, rssFile.getLength(), ProgressBarStyle.UNICODE_BLOCK).start();
 				}
-				try (Response response = new Progress().run(new URL(file.getUrl()), progressBar)) {
+				try (Response response = new Progress().run(new URL(rssFile.getUrl()), progressBar)) {
 					if (response.isSuccessful() && response.body() != null) {
 						final InputStream source = response.body().byteStream();
 						FileUtils.copyInputStreamToFile(source, targetFile);
@@ -71,7 +70,7 @@ public class OkHttpDownloader implements FileDownloader {
 			}
 		}
 		catch (IOException e) {
-			log.log(Level.SEVERE, e, () -> String.format("IOException from download %s to file %s", file.getUrl(), targetFileName));
+			log.log(Level.SEVERE, e, () -> String.format("IOException(%s) from download %s to file %s", e.getMessage(), rssFile.getUrl(), targetFileName));
 			targetFile.delete();//hopefully delete an incomplete download
 		}
 	}
