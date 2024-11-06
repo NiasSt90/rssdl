@@ -13,6 +13,7 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -39,7 +40,9 @@ public interface JunkiesAPI {
 
 	//ACHTUNG:
 	@PUT("js-api/node/{nid}")
+	@Headers("Content-Type: application/json; charset=utf-8")
 	Call<JsonObject> rawUpdate(@Path("nid") int nid, @Body JsonObject set);
+
 	@GET("js-api/node/{nid}")
 	Call<JsonObject> rawLoad(@Path("nid") int nid);
 
