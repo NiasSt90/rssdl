@@ -26,7 +26,7 @@ public class Progress {
 	public Response run(URL url, ProgressBar progressBar) throws IOException {
 		Request request = new Request.Builder().url(url).build();
 		OkHttpClient client = new OkHttpClient.Builder()
-				.readTimeout(2, TimeUnit.MINUTES).callTimeout(2, TimeUnit.MINUTES)
+				.readTimeout(2, TimeUnit.MINUTES)
 				.followRedirects(true)
 				.addNetworkInterceptor(chain -> {
 					if (progressBar != null) {
